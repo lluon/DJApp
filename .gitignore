@@ -1,0 +1,17 @@
+.DS_STORE
+src/*/*.make
+!src/*/addons.make
+src/*/.vs/
+src/*/*.rc
+src/*/*.sln
+src/*/*.vcxproj*
+src/*/bin/*.*
+!src/*/bin/data
+src/*/obj
+src/*/of_v*
+src/*/*.xcodeproj
+src/*/Makefile
+src/*/of.entitlements
+src/*/*.plist
+src/*/*.xcconfig
+src/*/bin/data/.gitkeep
