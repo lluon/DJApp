@@ -29,23 +29,20 @@ MainComponent::MainComponent()
     
     gainSlider.setRange(0,1); //section 8.32 Gain slider
 
-    URL audioURL("file:///Users/pandora/Desktop/DJapp/DJapp/asset/Ornella.wav"); //SECTION 9.32
+    juce::URL audioURL("file:///Users/pandora/Desktop/DJapp/DJapp/asset/Ornella.wav"); //SECTION 9.32
     
     auto reader = formatManager.createReaderFor(audioURL.getLocalFile());
     
     if (reader!=nullptr)
     {
-        auto newSource std::make_unique<juce::AudioFormatReaderSource>(reader, true);
-    }
-    AudioFormatReader * reader = formatManager.createReaderFor (audioURL.getLocalFile());
-    
-    if(reader)
-    {
-        auto newSource = std::make_unique<AudioFormatReaderSource>(reader, true);
-        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+        auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
+        
+        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);// section 9.3
         readerSource = std::move(newSource);
     }
+    
     else
+    
     {
         DBG("Something went wrong loading the file");
     }
@@ -101,7 +98,9 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 {
     // This function will be called when the audio device is started, or when
     // its settings (i.e. sample rate, block size, etc) are changed.
-    TransportSource.prepareToPlay(samplesPerBlockExpected, sampleRate); // section 9.21
+    
+    transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate); // section 9.21
+    
     // You can use this function to initialise any resources you might need,
     // but be careful - it will be called on the audio thread, not the GUI thread.
 
@@ -133,14 +132,14 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         if (rightChannel)  rightChannel[i] = sample;
     }
  */
-    TransportSource.getNextAudioBlock(bufferTofill);
+    transportSource.getNextAudioBlock(bufferTofill);
     
 }
 void MainComponent::releaseResources()
 {
     // This will be called when the audio device stops, or when it is being
     // restarted due to a setting change.
-    TransportSource.releaseResources(); //section 9,23
+    transportSource.releaseResources(); //section 9,23
     // For more details, see the help for AudioProcessor::releaseResources()
 }
 
