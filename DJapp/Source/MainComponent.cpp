@@ -6,8 +6,21 @@ MainComponent::MainComponent()
     // Make sure you set the size of the component after
     // you add any child components.
 
-    // Section 5,3  Adding a GUI Widget
-    addAndMakeVisible(playButton);
+    playButton.setButtonText("PLAY");   // section 7,5 button labels
+    stopButton.setButtonText("STOP");   // section 7,5 button labels
+    
+    
+    addAndMakeVisible(playButton);  // Section 5,3  Adding a GUI Widget
+    addAndMakeVisible(stopButton);  // Section 7,5  Adding to UI
+    addAndMakeVisible(gainSlider);  // Section 7,7  Add a slider
+    
+    
+    playButton.addListener(this);   // section 7.4 Register the Listener
+    stopButton.addListener(this);   // section 7.8 Register the Listener
+    gainSlider.addListener(this);   // section 7.8 Register the Listener
+    
+    
+    gainSlider.setRange(0,1); //section 8.32 Gain slider
 
     setSize (800, 600);
 
@@ -27,11 +40,31 @@ MainComponent::MainComponent()
 
 MainComponent::~MainComponent()
 {
-    // Section 5,2  Adding a GUI Widget
-    void addAndMakeVisible (Component& child, int zOrder = -1);
-    
     // This shuts down the audio device and clears the audio source.
     shutdownAudio();
+}
+//==============================================================================
+void MainComponent::buttonClicked(juce::Button* button) //section 7,6
+{
+    DBG ("MainComponent::buttonClicked:Button clicked"); //section 7,6
+    if (&playButton == button)
+    {
+        playing = true; // section 8,31 stop and astart
+        freq = 0; //section 8,5 lure of sirens
+    }
+    else if (&stopButton == button)
+    {
+        playing = false;
+    }
+}
+//==============================================================================
+void MainComponent::sliderValueChanged(juce::Slider *slider)
+{
+    if (slider == &gainSlider)
+    {
+        DBG("MainComponent::sliderValueChanged: gainSlider " <<gainSlider.getValue());
+        gain = gainSlider.getValue(); // 8.32 Gain slider
+    }
 }
 
 //==============================================================================
@@ -46,17 +79,31 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     // For more details, see the help for AudioProcessor::prepareToPlay()
 }
 
-void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
+void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& block)
 {
-    // Your audio-processing code goes here!
+    
+    if (!playing) // SECTION 8.3.1: start and stop (controlling the sound)
+    {
+        block.clearActiveBufferRegion();
+        return;
+    }
 
-    // For more details, see the help for AudioProcessor::getNextAudioBlock()
+    int numChannels = block.buffer->getNumChannels();  // SECTION 8,2 making a noise
 
-    // Right now we are not producing any data, in which case we need to clear the buffer
-    // (to prevent the output of random noise)
-    bufferToFill.clearActiveBufferRegion();
+    auto* leftChannel = numChannels > 0 ? block.buffer->getWritePointer(0, block.startSample) : nullptr;
+    auto* rightChannel = numChannels > 1 ? block.buffer->getWritePointer(1, block.startSample) : nullptr;
+
+    for (int i = 0; i < block.numSamples; ++i)     // SECTION 8.32 gain slider
+    {
+        auto sample = std::fmod(phase,1.f)*2. - 1.; // SECTION 8.4 making waves
+        sample *= 0.1 * gain;
+        phase += std::fmod(freq ,0.01f);     // SECTION 8.5 Lure of the sirens
+        freq += 0.0000005f;
+        
+        if (leftChannel)  leftChannel[i] = sample;
+        if (rightChannel)  rightChannel[i] = sample;
+    }
 }
-
 void MainComponent::releaseResources()
 {
     // This will be called when the audio device stops, or when it is being
@@ -70,6 +117,8 @@ void MainComponent::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    
+    
 
     // You can add your drawing code here!
 }
@@ -80,16 +129,14 @@ void MainComponent::resized()
     // If you add any child components, this is where you should
     // update their positions.
     
-    // Section 5,4  Adding a GUI Widget
-    playButton.setBounds(0, 0, getWidth(), getHeight()/5);
+    auto rowHeight = getHeight()/5;
     
-    
-    
-    
-        // 2. Print debug message to the IDE console
-        DBG ( " w : " << getWidth () << " h : " << getHeight () ) ;
+    playButton.setBounds(0, 0, getWidth(), rowHeight); // Section 5,4  Add GUI...
+    stopButton.setBounds(0, rowHeight, getWidth(), rowHeight);// Section 7,5
+    gainSlider.setBounds(0,rowHeight*2,getWidth(),rowHeight);// Section 7,5
 
-        // 3. Set the button bounds (x, y, width, height)
-        playButton.setBounds(0, 0, getWidth(), getHeight() / 5);
+    // Section 4, debug printing
+        DBG ( "w:" <<getWidth()<< "h:"<< getHeight());
+
 
 }
