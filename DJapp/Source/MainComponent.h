@@ -7,7 +7,7 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent  :  public juce::AudioAppComponent,
+class MainComponent  :  public juce::AudioAppComponent, // section 9.25
                         public juce::Button::Listener, // Section 7.2
                         public juce::Slider::Listener // Section 7.8
 
@@ -42,6 +42,8 @@ private:
     juce::AudioFormatManager formatManager; // section 9,1 setting up audioformat...
     juce::AudioTransportSource TransportSource; //section 9.2
 
+    std::unique_ptr<juce::AudioFormatReaderSource>readerSource; //section 9.3
+    
     bool playing = false; //section 8,3 state variables for sound control
     double gain = 0.5;     // sction 8,32 Gain slider
     float phase = 0.0f; // section 8,4 Making Waves

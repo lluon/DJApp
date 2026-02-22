@@ -86,15 +86,15 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     // For more details, see the help for AudioProcessor::prepareToPlay()
 }
 
-void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& block)
+void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferTofill)
 {
     
     if (!playing) // SECTION 8.3.1: start and stop (controlling the sound)
     {
-        block.clearActiveBufferRegion();
+        bufferTofill.clearActiveBufferRegion();
         return;
     }
-
+ /*
     int numChannels = block.buffer->getNumChannels();  // SECTION 8,2 making a noise
 
     auto* leftChannel = numChannels > 0 ? block.buffer->getWritePointer(0, block.startSample) : nullptr;
@@ -110,6 +110,9 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& block
         if (leftChannel)  leftChannel[i] = sample;
         if (rightChannel)  rightChannel[i] = sample;
     }
+ */
+    TransportSource.getNextAudioBlock(bufferTofill);
+    
 }
 void MainComponent::releaseResources()
 {
