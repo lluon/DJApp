@@ -73,14 +73,18 @@ MainComponent::~MainComponent()
 void MainComponent::buttonClicked(juce::Button* button) //section 7,6
 {
     DBG ("MainComponent::buttonClicked:Button clicked"); //section 7,6
+  
     if (&playButton == button)
     {
         playing = true; // section 8,31 stop and astart
         freq = 0; //section 8,5 lure of sirens
+        transportSource.setPosition(0); // section 9.51
+        transportSource.start();
     }
     else if (&stopButton == button)
     {
         playing = false;
+        transportSource.stop();//section 9.52
     }
 }
 //==============================================================================
@@ -90,6 +94,7 @@ void MainComponent::sliderValueChanged(juce::Slider *slider)
     {
         DBG("MainComponent::sliderValueChanged: gainSlider " <<gainSlider.getValue());
         gain = gainSlider.getValue(); // 8.32 Gain slider
+        transportSource.setGain(gain);//section 9.53
     }
 }
 
