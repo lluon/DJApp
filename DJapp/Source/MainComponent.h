@@ -40,10 +40,9 @@ private:
     juce::Slider gainSlider; // Section 7,7 Add a slider
     juce::Random random; // section 8.2 making noise
     juce::AudioFormatManager formatManager; // section 9,1 setting up audioformat...
+    std::unique_ptr<juce::AudioFormatReaderSource>readerSource; //section 9.3
     juce::AudioTransportSource TransportSource; //section 9.2
 
-    std::unique_ptr<juce::AudioFormatReaderSource>readerSource; //section 9.3
-    
     bool playing = false; //section 8,3 state variables for sound control
     double gain = 0.5;     // sction 8,32 Gain slider
     float phase = 0.0f; // section 8,4 Making Waves
