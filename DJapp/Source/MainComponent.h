@@ -34,7 +34,7 @@ private:
     //==============================================================================
     // Your private member variables go here...
     
-    
+    juce::TextButton loadButton; // section 9.6 file chooser
     juce::TextButton playButton; // Section 5,1 Adding a GUI Widget
     juce::TextButton stopButton; // Section 7,5 Member Variable Declaration
     juce::Slider gainSlider; // Section 7,7 Add a slider

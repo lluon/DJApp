@@ -13,19 +13,20 @@ MainComponent::MainComponent()
      DBG(audioFormat->getFormatName());
     };
     
-    playButton.setButtonText("PLAY");   // section 7,5 button labels
-    stopButton.setButtonText("STOP");   // section 7,5 button labels
-    
-    
     addAndMakeVisible(playButton);  // Section 5,3  Adding a GUI Widget
     addAndMakeVisible(stopButton);  // Section 7,5  Adding to UI
     addAndMakeVisible(gainSlider);  // Section 7,7  Add a slider
+    addAndMakeVisible(loadButton);  // section 9.6 file chooser
+    
+    playButton.setButtonText("PLAY");   // section 7,5 button labels
+    stopButton.setButtonText("STOP");   // section 7,5 button labels
+    loadButton.setButtonText("LOAD");   // section 9.6 file chhoser
     
     
     playButton.addListener(this);   // section 7.4 Register the Listener
     stopButton.addListener(this);   // section 7.8 Register the Listener
     gainSlider.addListener(this);   // section 7.8 Register the Listener
-    
+    loadButton.addListener(this);   // section 9.6 file chooser
     
     gainSlider.setRange(0,1); //section 8.32 Gain slider
 
@@ -74,6 +75,22 @@ void MainComponent::buttonClicked(juce::Button* button) //section 7,6
 {
     DBG ("MainComponent::buttonClicked:Button clicked"); //section 7,6
   
+    if (&loadButton == button)
+    {
+        FileChooser chooser {"Select a sound file..."};
+        if (chooser.browseForFileToOpen())
+        {
+            auto file = chooser.getResult();
+            auto * reader = formatManager.createReaderFor(file);
+            if (reader)
+            {
+                auto newSource = std::make_unique<AudioFormatReaderSource>(reader, true);
+                transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+                readerSource = std::move (newSource);
+            }
+        }
+    }
+    
     if (&playButton == button)
     {
         playing = true; // section 8,31 stop and astart
@@ -169,7 +186,8 @@ void MainComponent::resized()
     
     playButton.setBounds(0, 0, getWidth(), rowHeight); // Section 5,4  Add GUI...
     stopButton.setBounds(0, rowHeight, getWidth(), rowHeight);// Section 7,5
-    gainSlider.setBounds(0,rowHeight*2,getWidth(),rowHeight);// Section 7,5
+    loadButton.setBounds(0, rowHeight*2, getWidth(), rowHeight); // section 9.6 file chooser
+    gainSlider.setBounds(0, rowHeight*3, getWidth(), rowHeight);// Section 7,5
 
     // Section 4, debug printing
         DBG ( "w:" <<getWidth()<< "h:"<< getHeight());
