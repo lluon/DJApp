@@ -29,6 +29,28 @@ MainComponent::MainComponent()
     
     gainSlider.setRange(0,1); //section 8.32 Gain slider
 
+    URL audioURL("file:///Users/pandora/Desktop/DJapp/DJapp/asset/Ornella.wav"); //SECTION 9.32
+    
+    auto reader = formatManager.createReaderFor(audioURL.getLocalFile());
+    
+    if (reader!=nullptr)
+    {
+        auto newSource std::make_unique<juce::AudioFormatReaderSource>(reader, true);
+    }
+    AudioFormatReader * reader = formatManager.createReaderFor (audioURL.getLocalFile());
+    
+    if(reader)
+    {
+        auto newSource = std::make_unique<AudioFormatReaderSource>(reader, true);
+        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+        readerSource = std::move(newSource);
+    }
+    else
+    {
+        DBG("Something went wrong loading the file");
+    }
+    
+    
     setSize (800, 600);
 
     // Some platforms require permissions to open input channels so request that here
