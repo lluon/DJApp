@@ -5,7 +5,14 @@ MainComponent::MainComponent()
 {
     // Make sure you set the size of the component after
     // you add any child components.
-
+    
+    formatManager.registerBasicFormats(); //SECTION 9.11
+    
+    for (const auto* audioFormat : formatManager) //section 9.12
+    {
+     DBG(audioFormat->getFormatName());
+    };
+    
     playButton.setButtonText("PLAY");   // section 7,5 button labels
     stopButton.setButtonText("STOP");   // section 7,5 button labels
     
