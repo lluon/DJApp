@@ -40,6 +40,7 @@ private:
     juce::Slider gainSlider; // Section 7,7 Add a slider
     juce::Random random; // section 8.2 making noise
     juce::AudioFormatManager formatManager; // section 9,1 setting up audioformat...
+    juce::AudioTransportSource TransportSource; //section 9.2
 
     bool playing = false; //section 8,3 state variables for sound control
     double gain = 0.5;     // sction 8,32 Gain slider
