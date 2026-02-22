@@ -115,7 +115,7 @@ void MainComponent::releaseResources()
 {
     // This will be called when the audio device stops, or when it is being
     // restarted due to a setting change.
-
+    TransportSource.releaseResources(); //section 9,23
     // For more details, see the help for AudioProcessor::releaseResources()
 }
 
