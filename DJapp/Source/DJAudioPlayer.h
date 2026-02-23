@@ -8,40 +8,54 @@
   ==============================================================================
 */
 
-#pragma once    //operate once
+#pragma once
 
-#include <JuceHeader.h>         //include premade JuceHeader class
-
+#include <JuceHeader.h>
 
 /*
     This component is a simple audio player component,
-    who mainly load, play and stop control, position seeking
-    and volume adjustment
+    which mainly handles loading, play and stop control,
+    position seeking, and volume adjustment.
 */
 //==============================================================================
 
-class DJAudioPlayer
+// section 10.61: DJAudioPlayer now inherits from AudioSource
+class DJAudioPlayer : public juce::AudioSource
 {
-    public:
-    
-        
-        DJAudioPlayer();        // constructor/ intitialize player
-        ~DJAudioPlayer();       // destructor/ clean up resources
-        bool loadURL(const juce::URL& url);     //loads audio file from anywhere
-        void play();            // start / resume audio playback
-        void stop();            // stop / reset to beginning
-        void setPosition(double posInSecs);     // setting position to 0.0 in seconds
-        void setGain(double gain);      // set the volume level (0 to 1)
-    
-    private:
-    
-    juce::AudioFormatManager formatManager; // manage all audioformato files
+public:
+    // section 10.62: Constructor takes a reference to the manager
+    DJAudioPlayer(juce::AudioFormatManager& _formatManager);
+    ~DJAudioPlayer() override;
 
-    //reader, driven by unique_pointer because his lifetime span is tide with file selection
-    std::unique_ptr <juce::AudioFormatReaderSource> readerSource;
+    // section 10.63: Standard AudioSource lifecycle methods
+    void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override;
+    void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) override;
+    void releaseResources() override;
+
+    /** Loads audio file from a URL */
+    bool loadURL(const juce::URL& url);
     
-    // playback controller
+    /** Start / resume audio playback */
+    void play();
+    
+    /** Stop playback */
+    void stop();
+    
+    /** Set the playback position in seconds */
+    void setPosition(double posInSecs);
+    
+    /** Set the volume level (0 to 1) */
+    void setGain(double gain);
+
+private:
+    // section 10.64: Reference to the manager held in MainComponent
+    juce::AudioFormatManager& formatManager;
+
+    // Reader, managed by unique_pointer because its lifetime is tied to file selection
+    std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
+
+    // Playback controller
     juce::AudioTransportSource transportSource;
 
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DJAudioPlayer)
 };
-

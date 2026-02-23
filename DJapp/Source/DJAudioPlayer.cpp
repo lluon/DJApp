@@ -8,44 +8,72 @@
   ==============================================================================
 */
 
-
 #include "DJAudioPlayer.h"
 
-
 //==============================================================================
-DJAudioPlayer::DJAudioPlayer()
+// section 10.65: Use _formatManager as the parameter to initialize the member
+DJAudioPlayer::DJAudioPlayer(juce::AudioFormatManager& _formatManager)
+: formatManager(_formatManager)
 {
-    // initialize audio object
 }
 
 //==============================================================================
 DJAudioPlayer::~DJAudioPlayer()
 {
-    // clean up audio object
+    // Destructor
 }
+
+void DJAudioPlayer::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
+{
+    transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+}
+
+void DJAudioPlayer::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
+{
+    transportSource.getNextAudioBlock(bufferToFill);
+}
+
+void DJAudioPlayer::releaseResources()
+{
+    transportSource.releaseResources();
+}
+
 //==============================================================================
 bool DJAudioPlayer::loadURL (const juce::URL& url)
 {
-    return false; //load file return if ok
+    auto* reader = formatManager.createReaderFor(url.getLocalFile());
+    
+    if (reader != nullptr)
+    {
+        auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
+        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+        readerSource = std::move(newSource);
+        return true;
+    }
+    
+    return false; // Return false if loading failed
 }
 
 //==============================================================================
 void DJAudioPlayer::play()
 {
-    //start, resume playback
+    transportSource.start(); // Start or resume playback
 }
+
 //==============================================================================
 void DJAudioPlayer::stop()
 {
-    //stop, rewind
+    transportSource.stop(); // Stop playback
 }
+
 //==============================================================================
 void DJAudioPlayer::setPosition (double posInSecs)
 {
-    // position seeker
+    transportSource.setPosition(posInSecs); // Seek to position
 }
+
 //==============================================================================
 void DJAudioPlayer::setGain (double gain)
 {
-    // set volume
+    transportSource.setGain(gain); // Set volume level
 }
