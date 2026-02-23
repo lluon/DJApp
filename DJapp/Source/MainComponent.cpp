@@ -32,7 +32,8 @@ MainComponent::MainComponent()
 
     juce::URL audioURL("file:///Users/pandora/Desktop/DJapp/DJapp/asset/Ornella.wav"); //SECTION 9.32
     
-    auto reader = formatManager.createReaderFor(audioURL.getLocalFile());
+/*
+     auto reader = formatManager.createReaderFor(audioURL.getLocalFile());
     
     if (reader!=nullptr)
     {
@@ -47,7 +48,7 @@ MainComponent::MainComponent()
     {
         DBG("Something went wrong loading the file");
     }
-    
+*/ //section 9.73 to comment out
     
     setSize (800, 600);
 
@@ -71,16 +72,35 @@ MainComponent::~MainComponent()
     shutdownAudio();
 }
 //==============================================================================
+    // section 9.7 (DRY implementation
+
+//==============================================================================
+bool MainComponent::loadURL(const juce::URL& audioURL)
+    {
+        auto * reader = formatManager.createReaderFor(audioURL.getLocalFile());
+        if (reader)
+        {
+            auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
+            transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+            readerSource = std::move(newSource);
+            return true;
+        }
+        return false;
+
+    }
+
+
+//==============================================================================
 void MainComponent::buttonClicked(juce::Button* button) //section 7,6
 {
-    DBG ("MainComponent::buttonClicked:Button clicked"); //section 7,6
-  
+/* DBG ("MainComponent::buttonClicked:Button clicked"); //section 7,6
+*/
     if (&loadButton == button)
     {
         juce::FileChooser chooser {"Select a sound file..."};
         if (chooser.browseForFileToOpen())
         {
-            auto file = chooser.getResult();
+        /*  auto file = chooser.getResult();
             auto * reader = formatManager.createReaderFor(file);
             if (reader)
             {
@@ -88,6 +108,9 @@ void MainComponent::buttonClicked(juce::Button* button) //section 7,6
                 transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
                 readerSource = std::move (newSource);
             }
+         */ // comment out section 9,74
+            
+            loadURL(juce::URL{chooser.getResult () }); //section 9,75
         }
     }
     

@@ -33,6 +33,7 @@ public:
 private:
     //==============================================================================
     // Your private member variables go here...
+    bool loadURL(const juce::URL& audioURL); // section 9.71 cleanup procees
     
     juce::TextButton loadButton; // section 9.6 file chooser
     juce::TextButton playButton; // Section 5,1 Adding a GUI Widget
