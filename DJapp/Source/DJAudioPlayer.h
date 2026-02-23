@@ -26,16 +26,22 @@ class DJAudioPlayer
     
         
         DJAudioPlayer();        // constructor/ intitialize player
-    
         ~DJAudioPlayer();       // destructor/ clean up resources
-
         bool loadURL(const juce::URL& url);     //loads audio file from anywhere
-    
         void play();            // start / resume audio playback
-    
         void stop();            // stop / reset to beginning
-        
         void setPosition(double posInSecs);     // setting position to 0.0 in seconds
-        
         void setGain(double gain);      // set the volume level (0 to 1)
+    
+    private:
+    
+    juce::AudioFormatManager formatManager; // manage all audioformato files
+
+    //reader, driven by unique_pointer because his lifetime span is tide with file selection
+    std::unique_ptr <juce::AudioFormatReaderSource> readerSource;
+    
+    // playback controller
+    juce::AudioTransportSource transportSource;
+
 };
+
