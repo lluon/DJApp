@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="he2Haa" name="DJapp" projectType="guiapp" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" defines="JUCE_MODAL_LOOPS_PERMITTED=1">
   <MAINGROUP id="VMjlYk" name="DJapp">
     <GROUP id="{F46B488A-F6A2-12EF-6F21-0AD09A5905B7}" name="Source">
       <FILE id="JcGXta" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>

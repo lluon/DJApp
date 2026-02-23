@@ -77,14 +77,14 @@ void MainComponent::buttonClicked(juce::Button* button) //section 7,6
   
     if (&loadButton == button)
     {
-        FileChooser chooser {"Select a sound file..."};
+        juce::FileChooser chooser {"Select a sound file..."};
         if (chooser.browseForFileToOpen())
         {
             auto file = chooser.getResult();
             auto * reader = formatManager.createReaderFor(file);
             if (reader)
             {
-                auto newSource = std::make_unique<AudioFormatReaderSource>(reader, true);
+                auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
                 transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
                 readerSource = std::move (newSource);
             }
