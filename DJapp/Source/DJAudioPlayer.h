@@ -12,7 +12,6 @@
 
 #include <JuceHeader.h>         //include premade JuceHeader class
 
-# include "DJAudioPlayer.h"     // include new builded class section 10.6
 
 /*
     This component is a simple audio player component,
@@ -24,6 +23,8 @@
 class DJAudioPlayer
 {
     public:
+    
+        
         DJAudioPlayer();        // constructor/ intitialize player
     
         ~DJAudioPlayer();       // destructor/ clean up resources

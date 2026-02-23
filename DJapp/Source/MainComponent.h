@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DJAudioPlayer.h" // section 10.61
 
 //==============================================================================
 /*
@@ -33,6 +34,9 @@ public:
 private:
     //==============================================================================
     // Your private member variables go here...
+    
+    DJAudioPlayer player1; // call audioplayer component, section 10.62
+    
     bool loadURL(const juce::URL& audioURL); // section 9.71 cleanup procees
     
     juce::TextButton loadButton; // section 9.6 file chooser
