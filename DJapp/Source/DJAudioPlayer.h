@@ -19,20 +19,20 @@
 */
 //==============================================================================
 
-class DJAudioPlayer //simple audio player component
+class DJAudioPlayer
 {
     public:
-        DJAudioPlayer();    // constructor/ intitialize
+        DJAudioPlayer();    // constructor/ intitialize player
     
-        ~DJAudioPlayer();   // destructor/ allocated memory cleaner
+        ~DJAudioPlayer();   // destructor/ clean up resources
 
-        bool loadURL(const juce::URL& url); //loads audio file from URL
+        bool loadURL(const juce::URL& url); //loads audio file from anywhere
     
-        void play();        // start or resume audio playback
+        void play();        // start / resume audio playback
     
-        void stop();        // stop audio playback if already then null
+        void stop();        // stop / reset to beginning
         
         void setPosition(double posInSecs); // setting position to 0.0 in seconds
         
-        void setGain(double gain); // set the volume level
+        void setGain(double gain); // set the volume level (0 to 1)
 };
