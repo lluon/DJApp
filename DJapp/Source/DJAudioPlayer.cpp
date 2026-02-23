@@ -9,3 +9,9 @@
 */
 
 #include "DJAudioPlayer.h"
+
+DJAudioPlayer::DJAudioPlayer(){ }
+
+DJAudioPlayer::~DJAudioPlayer(){ }
+
+bool DJAudioPlayer::loadURL(const juce::URL& url){return false; }
