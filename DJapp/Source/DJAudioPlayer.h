@@ -10,7 +10,9 @@
 
 #pragma once    //operate once
 
-#include <JuceHeader.h> //include premade JuceHeader class
+#include <JuceHeader.h>         //include premade JuceHeader class
+
+# include "DJAudioPlayer.h"     // include new builded class section 10.6
 
 /*
     This component is a simple audio player component,
@@ -22,17 +24,17 @@
 class DJAudioPlayer
 {
     public:
-        DJAudioPlayer();    // constructor/ intitialize player
+        DJAudioPlayer();        // constructor/ intitialize player
     
-        ~DJAudioPlayer();   // destructor/ clean up resources
+        ~DJAudioPlayer();       // destructor/ clean up resources
 
-        bool loadURL(const juce::URL& url); //loads audio file from anywhere
+        bool loadURL(const juce::URL& url);     //loads audio file from anywhere
     
-        void play();        // start / resume audio playback
+        void play();            // start / resume audio playback
     
-        void stop();        // stop / reset to beginning
+        void stop();            // stop / reset to beginning
         
-        void setPosition(double posInSecs); // setting position to 0.0 in seconds
+        void setPosition(double posInSecs);     // setting position to 0.0 in seconds
         
-        void setGain(double gain); // set the volume level (0 to 1)
+        void setGain(double gain);      // set the volume level (0 to 1)
 };
